@@ -7,7 +7,21 @@ public class MachineModel {
 	public final Map<Integer, Instruction> IMAP = new TreeMap<>();
 	private CPU cpu = new CPU();
 	private Memory memory = new Memory();
+
+	public int getData(int index) {
+		return memory.getData(index);
+	}
+
+	public void setData(int index, int value) {
+		memory.setData(index, value);
+	}
+
+	public void setCode(int index, int op, int indirLvl, int arg) {
+		code.setCode(index, op, indirLvl, arg);
+	}
+
 	private HaltCallback callback;
+	private Code code = new Code();
 
 	public MachineModel(HaltCallback callBack){
 		//NOP
@@ -176,7 +190,11 @@ public class MachineModel {
 		this(() -> System.exit(0));
 	}
 	
-	public Map<Integer, Instruction> getIMAP() {
-		return IMAP;
+	public Instruction get(int num) {
+		return IMAP.get(num);
+	}
+
+	public Code getCode() {
+		return code;
 	}
 }

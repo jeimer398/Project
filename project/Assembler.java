@@ -44,7 +44,7 @@ public class Assembler {
 			}
 			int opcode = InstructionMap.opcode.get(parts[0]);
 			if(parts.length == 1){
-				outText.add(Integer.toHexString(opcode).toUpperCase() + " 1 0");
+				outText.add(Integer.toHexString(opcode).toUpperCase() + " 0 0");
 			}
 			if(parts.length == 2){
 				outText.add(Integer.toHexString(opcode).toUpperCase() + " " + indirLvl + " " + parts[1]);
@@ -58,8 +58,12 @@ public class Assembler {
 			errors.add("Cannot create output file");
 		}
 	}
+/*
 	public static void main(String[] args) {
 		ArrayList<String> errors = new ArrayList<>();
-		assemble(new File("in.pasm"), new File("out.pexe"), errors);		
-	}
+		assemble(new File("in.pasm"), new File("out.pexe"), errors);
+		for (String er: errors) {
+			System.out.println(er);
+		}
+	}*/
 }

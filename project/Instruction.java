@@ -1,5 +1,5 @@
 package project;
 
 public interface Instruction {
-	public void execute(int arg, int indirLvl);
+	void execute(int arg, int indirLvl);
 }

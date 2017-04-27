@@ -40,25 +40,58 @@ public class Assembler2 {
             }
             if (errors.size() == 0) {
                 boolean separate = false;
-                for (int i = 0; i < inText.size(); i++) {
-                    //TODO----------------------------------------
+                int i = 0;
+                while (!inText.get(i).startsWith("--")) {
+                    code.add(inText.get(i).trim());
+                    i++;
                 }
-            }
+                for (i++; i < inText.size(); i++) {
+                    data.add(inText.get(i).trim());
+                }
+            } //else {return;} in future if further error checking is too hard or doesnt work
         } catch(FileNotFoundException e){
             errors.add(0, "Input file does not exist.");
             return;
         }
         ArrayList<String>outText = new ArrayList<>();
-        for(String line : code){
+        for(int i = 0; i < code.size(); i++){
+            String line = code.get(i);
             String[] parts = line.trim().split("\\s+");
+            if (InstructionMap.sourceCodes.contains(parts[0].toUpperCase()) && !InstructionMap.sourceCodes.contains(parts[0])) {
+                errors.add("Error: line " + i + 1 + " does not have the instruction mnemonic in upper case");
+            } else if (InstructionMap.noArgument.contains(parts[0]) && parts.length != 1) {
+                errors.add("Error: line " + i + 1 + " has an illegal argument");
+            } else if (!InstructionMap.noArgument.contains(parts[0])) {
+                if (parts.length == 1) {
+                    errors.add("Error: line " + i + 1 + " is missing an argument");
+                } else if (parts.length > 2) {
+                    errors.add("Error: line " + i + 1 + " has more than one argument");
+                }
+            }
             int indirLvl = 0;
             if(parts.length == 2){
                 indirLvl = 1;
                 if(parts[1].startsWith("[")){
-                    parts[1] = parts[1].substring(1, parts[1].length()-1);
-                    indirLvl = 2;
+                    if (!InstructionMap.indirectOK.contains(parts[0])) {
+                        errors.add("Error: line " + i + 1 + " this opcode does not support indirect arguments");
+                    } else if (!parts[1].endsWith("]")) {
+                        errors.add("Error: line " + i + 1 + " open brace with no closing brace");
+                        parts[1] = parts[1].substring(1);
+                        indirLvl = 2;
+                    } else {
+                        parts[1] = parts[1].substring(1, parts[1].length() - 1);
+                        indirLvl = 2;
+                    }
                 }
             }
+            int arg = 0;
+            try {
+                arg = Integer.parseInt(parts[1],16);
+            } catch (NumberFormatException e) {
+                errors.add("Error: line " + i + 1
+                        + " does not have a numeric argument");
+            }
+            //PLACEHOLDER IN CASE WE REMEMBER ANY OTHER ERRORS
             if(parts[0].endsWith("I")){
                 indirLvl = 0;
             } else if(parts[0].endsWith("A")){
@@ -73,7 +106,31 @@ public class Assembler2 {
             }
         }
         outText.add("-1");
+        for (int i = 0; i < data.size(); i++) {
+            String line = code.get(i);
+            String[] parts = line.trim().split("\\s+");
+            if (parts.length != 2) {
+                errors.add("Error: line " + i + code.size() + 2 + " incorrect number of terms in data line");
+            } else {
+                int arg = 0;
+                try {
+                    arg = Integer.parseInt(parts[0],16);
+                } catch (NumberFormatException e) {
+                    errors.add("Error: line " + i + code.size() + 2
+                            + " does not have a numeric address");
+                }
+                try {
+                    arg = Integer.parseInt(parts[1],16);
+                } catch (NumberFormatException e) {
+                    errors.add("Error: line " + i + code.size() + 2
+                            + " does not have a numeric value");
+                }
+            }
+        }
         outText.addAll(data);
+        if (errors.size() > 0) {
+            return;
+        }
         try (PrintWriter out = new PrintWriter(output)){
             for(String s : outText) out.println(s);
         } catch (FileNotFoundException e) {

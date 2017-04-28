@@ -18,21 +18,21 @@ public class Assembler2 {
             }
             for (int i = 0; i < inText.size() - 1; i++) {
                 if (inText.get(i).trim().length() == 0 && inText.get(i + 1).trim().length() > 0) {
-                    errors.add("Error: line " + i + 1 + " is a blank line");  //DO LINE NUMBERS INDEX AT 0 OR 1??
+                    errors.add("Error: line " + (i + 1) + " is a blank line");
                 }
             }
             for (int i = 0; i < inText.size(); i++) {
-                if (inText.get(i).charAt(0) == ' ' || inText.get(i).charAt(0) == '\t') {
-                    errors.add("Error: line " + i + 1 + " starts with white space");
+                if (inText.get(i).startsWith(" ") || inText.get(i).startsWith("\t")) {
+                    errors.add("Error: line " + (i + 1) + " starts with white space");
                 }
             }
             boolean ds1Found = false;
             for (int i = 0; i < inText.size(); i++) {
                 if (inText.get(i).startsWith("--")) {
-                    if (!ds1Found && inText.get(i).trim().replace("-", "").length() == 0) {
-                        errors.add("Error: line " + i + 1 + " has a badly formatted data separator");
+                    if (!ds1Found && inText.get(i).trim().replace("-", "").length() != 0) {
+                        errors.add("Error: line " + (i + 1) + " has a badly formatted data separator");
                     } else if (ds1Found) {
-                        errors.add("Error: line " + i + 1 + " has a duplicate data separator");
+                        errors.add("Error: line " + (i + 1) + " has a duplicate data separator");
                     } else {
                         ds1Found = true;
                     }
@@ -58,14 +58,14 @@ public class Assembler2 {
             String line = code.get(i);
             String[] parts = line.trim().split("\\s+");
             if (InstructionMap.sourceCodes.contains(parts[0].toUpperCase()) && !InstructionMap.sourceCodes.contains(parts[0])) {
-                errors.add("Error: line " + i + 1 + " does not have the instruction mnemonic in upper case");
+                errors.add("Error: line " + (i + 1) + " does not have the instruction mnemonic in upper case");
             } else if (InstructionMap.noArgument.contains(parts[0]) && parts.length != 1) {
-                errors.add("Error: line " + i + 1 + " has an illegal argument");
+                errors.add("Error: line " + (i + 1) + " has an illegal argument");
             } else if (!InstructionMap.noArgument.contains(parts[0])) {
                 if (parts.length == 1) {
-                    errors.add("Error: line " + i + 1 + " is missing an argument");
+                    errors.add("Error: line " + (i + 1) + " is missing an argument");
                 } else if (parts.length > 2) {
-                    errors.add("Error: line " + i + 1 + " has more than one argument");
+                    errors.add("Error: line " + (i + 1) + " has more than one argument");
                 }
             }
             int indirLvl = 0;
@@ -73,23 +73,23 @@ public class Assembler2 {
                 indirLvl = 1;
                 if(parts[1].startsWith("[")){
                     if (!InstructionMap.indirectOK.contains(parts[0])) {
-                        errors.add("Error: line " + i + 1 + " this opcode does not support indirect arguments");
+                        errors.add("Error: line " + (i + 1) + " this opcode does not support indirect arguments");
                     } else if (!parts[1].endsWith("]")) {
-                        errors.add("Error: line " + i + 1 + " open brace with no closing brace");
+                        errors.add("Error: line " + (i + 1) + " open brace with no closing brace");
                         parts[1] = parts[1].substring(1);
                         indirLvl = 2;
                     } else {
                         parts[1] = parts[1].substring(1, parts[1].length() - 1);
                         indirLvl = 2;
                     }
+                    int arg = 0;
+                    try {
+                        arg = Integer.parseInt(parts[1],16);
+                    } catch (NumberFormatException e) {
+                        errors.add("Error: line " + (i + 1)
+                                + " does not have a numeric argument");
+                    }
                 }
-            }
-            int arg = 0;
-            try {
-                arg = Integer.parseInt(parts[1],16);
-            } catch (NumberFormatException e) {
-                errors.add("Error: line " + i + 1
-                        + " does not have a numeric argument");
             }
             //PLACEHOLDER IN CASE WE REMEMBER ANY OTHER ERRORS
             if(parts[0].endsWith("I")){
@@ -107,22 +107,22 @@ public class Assembler2 {
         }
         outText.add("-1");
         for (int i = 0; i < data.size(); i++) {
-            String line = code.get(i);
+            String line = data.get(i);
             String[] parts = line.trim().split("\\s+");
             if (parts.length != 2) {
-                errors.add("Error: line " + i + code.size() + 2 + " incorrect number of terms in data line");
+                errors.add("Error: line " + (i + code.size() + 2) + " incorrect number of terms in data line");
             } else {
                 int arg = 0;
                 try {
                     arg = Integer.parseInt(parts[0],16);
                 } catch (NumberFormatException e) {
-                    errors.add("Error: line " + i + code.size() + 2
+                    errors.add("Error: line " + (i + code.size() + 2)
                             + " does not have a numeric address");
                 }
                 try {
                     arg = Integer.parseInt(parts[1],16);
                 } catch (NumberFormatException e) {
-                    errors.add("Error: line " + i + code.size() + 2
+                    errors.add("Error: line " + (i + code.size() + 2)
                             + " does not have a numeric value");
                 }
             }
@@ -135,6 +135,14 @@ public class Assembler2 {
             for(String s : outText) out.println(s);
         } catch (FileNotFoundException e) {
             errors.add("Cannot create output file");
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayList<String> errors = new ArrayList<>();
+        assemble(new File("in.pasm"), new File("out.pexe"), errors);
+        for (String er: errors) {
+            System.out.println(er);
         }
     }
 }

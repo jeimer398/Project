@@ -137,12 +137,12 @@ public class Assembler2 {
             errors.add("Cannot create output file");
         }
     }
-
+/*
     public static void main(String[] args) {
         ArrayList<String> errors = new ArrayList<>();
         assemble(new File("in.pasm"), new File("out.pexe"), errors);
         for (String er: errors) {
             System.out.println(er);
         }
-    }
+    }*/
 }

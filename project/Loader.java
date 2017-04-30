@@ -43,7 +43,7 @@ public class Loader {
             return "File " + file.getName() + " Not Found";
         }
     }
-
+/*
     public static void main(String[] args) {
         MachineModel model = new MachineModel();
         String s = Loader.load(model, new File("out.pexe"),16,32);
@@ -57,5 +57,5 @@ public class Loader {
                 Integer.toHexString(model.getData(0x20)).toUpperCase());
         System.out.println("10 -" +
                 Integer.toHexString(-model.getData(0x20+0x10)).toUpperCase());
-    }
+    }*/
 }

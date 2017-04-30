@@ -158,29 +158,42 @@ public class MachineModel {
 			}
 			cpu.incrPC();
 		});
-		//JUMP
-		IMAP.put(0xB, (arg,level) -> {
-			if(level < 0 || level > 1) {
+		//INSTRUCTION MAP entry for "JUMP"
+		IMAP.put(0xB, (arg, level) -> {
+			if(level < 0 || level > 3) {
 				throw new IllegalArgumentException(
-						"Illegal indirection level in JUMP instruction.");
+						"Illegal indirection level in JUMP instruction");
 			}
-			else{
-				cpu.setpCounter(cpu.getpCounter()+arg);
+			if (level == 3) {
+				int arg1 = memory.getData(cpu.getMemBase()+arg); // CORRECTION
+				cpu.setpCounter(arg1 + currentJob.getStartcodeIndex());   // CORRECTION
+			} else if(level > 0) {
+				IMAP.get(0x2).execute(memory.getData(cpu.getMemBase()+arg), level-1);
+			} else {
+				cpu.setpCounter(cpu.getpCounter() + arg);
 			}
 		});
-		//JMPZ
-		IMAP.put(0xC, (arg,level) -> {
-			if(level < 0 || level > 1) {
+
+		//INSTRUCTION MAP entry for "JUMP"
+		IMAP.put(0xB, (arg, level) -> {
+			if(level < 0 || level > 3) {
 				throw new IllegalArgumentException(
-						"Illegal indirection level in JUMP instruction.");
+						"Illegal indirection level in JUMP instruction");
 			}
-			if(cpu.getAccum()==0){
-				cpu.setpCounter(arg);
-			}
-			else{
+			if (cpu.getAccum() == 0) {
+				if (level == 3) {
+					int arg1 = memory.getData(cpu.getMemBase()+arg); // CORRECTION
+					cpu.setpCounter(arg1 + currentJob.getStartcodeIndex());   // CORRECTION
+				} else if (level > 0) {
+					IMAP.get(0x2).execute(memory.getData(cpu.getMemBase() + arg), level - 1);
+				} else {
+					cpu.setpCounter(cpu.getpCounter() + arg);
+				}
+			} else {
 				cpu.incrPC();
 			}
 		});
+
 		//HALT
 		IMAP.put(0xD, (arg, level) -> {
 			callback.halt();			

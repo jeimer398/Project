@@ -112,7 +112,7 @@ public class GUIMediator extends Observable{
 	}
 
 	public void toggleAutoStep(){
-		stepControl.toggleAutoStep();
+		stepControl.toggleAutoStepOn();
 		if(stepControl.isAutoStepOn()){
 			model.setCurrentState(States.AUTO_STEPPING);
 		}else{

@@ -39,11 +39,11 @@ public class MemoryViewPanel implements Observer {
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BorderLayout());
         JPanel numPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(0, 1));
+        numPanel.setLayout(new GridLayout(0, 1));
         JPanel decimalPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(0, 1));
+        decimalPanel.setLayout(new GridLayout(0, 1));
         JPanel hexPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(0, 1));
+        hexPanel.setLayout(new GridLayout(0, 1));
         innerPanel.add(numPanel, BorderLayout.LINE_START);
         innerPanel.add(decimalPanel, BorderLayout.CENTER);
         innerPanel.add(hexPanel, BorderLayout.LINE_END);

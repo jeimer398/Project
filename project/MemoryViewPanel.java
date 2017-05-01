@@ -101,7 +101,7 @@ public class MemoryViewPanel implements Observer {
             }
         }
     }
-
+/*
     public static void main(String[] args) {
         GUIMediator view = new GUIMediator();
         MachineModel model = new MachineModel();
@@ -114,5 +114,5 @@ public class MemoryViewPanel implements Observer {
         frame.setVisible(true);
         System.out.println(Loader.load(model, new File("out.pexe"), 0, 0));
         panel.update(view, null);
-    }
+    }*/
 }

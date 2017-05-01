@@ -75,6 +75,18 @@ public class Code {
         return bldr.toString();
     }
 
+    public String getHex(int i) {
+        int arg = getArg(i);
+        String retVal = "";
+        retVal += Integer.toHexString(getOp(i)).toUpperCase() + " " + Integer.toHexString(getIndirLvl(i)).toUpperCase() + " ";
+        if (arg < 0) {
+            retVal += "-" + Integer.toHexString(-arg).toUpperCase();
+        } else {
+            retVal += Integer.toHexString(arg).toUpperCase();
+        }
+        return retVal;
+    }
+
     /*
     public static void main(String[] args) {
         Code c = new Code();

@@ -21,7 +21,13 @@ public class FilesMgr {
     // Java method for persistent program properties
     private File currentlyExecutingFile = null; // java.io.File
 
-    private void locateDefaultDirectory() {
+    public FilesMgr(GUIMediator gui) {
+		super();
+		this.gui = gui;
+		this.model = gui.getModel();
+	}
+
+	private void locateDefaultDirectory() {
         //CODE TO DISCOVER THE ECLIPSE DEFAULT DIRECTORY:
         File temp = new File("propertyfile.txt");
         if(!temp.exists()) {
@@ -203,5 +209,9 @@ public class FilesMgr {
                     "Warning",
                     JOptionPane.OK_OPTION);
         }
+    }
+    public void initialize(){
+    	locateDefaultDirectory();
+    	loadPropertiesFile();
     }
 }

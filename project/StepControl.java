@@ -12,7 +12,12 @@ public class StepControl {
     Timer timer;
     GUIMediator gui;
 
-    public void toggleAutoStepOn() {
+    public StepControl(GUIMediator gui) {
+		super();
+		this.gui = gui;
+	}
+
+	public void toggleAutoStepOn() {
         if (autoStepOn) {
             autoStepOn = false;
         } else {

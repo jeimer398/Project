@@ -1,13 +1,22 @@
 package project;
 
 import javax.swing.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.Observable;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
 public class GUIMediator extends Observable{
 	private MachineModel model;
 	private FilesMgr filesMgr;
 	private StepControl stepControl;
 	private JFrame frame;
+	private CodeViewPanel codeViewPanel;
+	private MemoryViewPanel memoryViewPanel1;
+	private MemoryViewPanel memoryViewPanel2;
+	private MemoryViewPanel memoryViewPanel3;
 
 	public void step(){
 		if(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){
@@ -45,9 +54,9 @@ public class GUIMediator extends Observable{
 				JOptionPane.showMessageDialog(
 						frame,
 						"Illegal access to code " + model.getpCounter() + "\n"
-						+ "Exception message: " + e.getMessage(),
-						"Divide by zero error",
-						JOptionPane.OK_OPTION);
+								+ "Exception message: " + e.getMessage(),
+								"Divide by zero error",
+								JOptionPane.OK_OPTION);
 			}
 			setChanged();
 			notifyObservers();
@@ -90,15 +99,15 @@ public class GUIMediator extends Observable{
 				JOptionPane.showMessageDialog(
 						frame,
 						"Illegal access to code " + model.getpCounter() + "\n"
-						+ "Exception message: " + e.getMessage(),
-						"Divide by zero error",
-						JOptionPane.OK_OPTION);
+								+ "Exception message: " + e.getMessage(),
+								"Divide by zero error",
+								JOptionPane.OK_OPTION);
 			}
 		}
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	public JFrame getFrame() {
 		return frame;
 	}
@@ -184,5 +193,52 @@ public class GUIMediator extends Observable{
 		if (decision == JOptionPane.YES_OPTION) {
 			System.exit(0);
 		}
+	}
+
+	private void createAndShowGUI(){
+		stepControl = new StepControl(this);
+		filesMgr = new FilesMgr(this);
+		filesMgr.initialize();
+
+		codeViewPanel = new CodeViewPanel(this, model);
+
+		memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
+		memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE/2);
+		memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
+
+		//controlPanel = new ControlViewPanel(this, model);
+		//processorPanel = new ProcessorViewPanel(this, model);
+		//menuBuilder = new MenuBarBuilder(this);
+
+		frame = new JFrame("Simulator");
+		Container content = frame.getContentPane();
+		content.setLayout(new BorderLayout(1,1));
+		content.setBackground(Color.BLACK);
+		content.setSize(new Dimension(1200, 600));
+
+		JPanel center = new JPanel();
+		center.setLayout(new GridLayout(1, 3));
+		frame.add(codeViewPanel.createCodeDisplay(), BorderLayout.LINE_START);
+		center.add(memoryViewPanel1.createMemoryDisplay());
+		center.add(memoryViewPanel2.createMemoryDisplay()); 
+		center.add(memoryViewPanel3.createMemoryDisplay());
+		frame.add(center, BorderLayout.CENTER);
+		//RETURN HERE FOR THE OTHER GUI COMPONENTS
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// return HERE for other setup details
+		frame.setVisible(true);
+	}
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				GUIMediator organizer = new GUIMediator();
+				MachineModel model = new MachineModel(
+				//() 
+				//-> organizer.setCurrentState(States.PROGRAM_HALTED)
+				);
+				organizer.setModel(model);
+				organizer.createAndShowGUI();
+				}
+			});
 	}
 }

@@ -228,17 +228,17 @@ public class GUIMediator extends Observable{
 		// return HERE for other setup details
 		frame.setVisible(true);
 	}
-	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				GUIMediator organizer = new GUIMediator();
-				MachineModel model = new MachineModel(
-				//() 
-				//-> organizer.setCurrentState(States.PROGRAM_HALTED)
-				);
-				organizer.setModel(model);
-				organizer.createAndShowGUI();
-				}
-			});
-	}
+// 	public static void main(String[] args) {
+// 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+// 			public void run() {
+// 				GUIMediator organizer = new GUIMediator();
+// 				MachineModel model = new MachineModel(
+// 				//() 
+// 				//-> organizer.setCurrentState(States.PROGRAM_HALTED)
+// 				);
+// 				organizer.setModel(model);
+// 				organizer.createAndShowGUI();
+// 				}
+// 			});
+// 	}
 }

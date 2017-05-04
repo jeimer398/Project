@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.util.Observable;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.JMenuBar;
 
 public class GUIMediator extends Observable{
 	private MachineModel model;
@@ -17,6 +18,83 @@ public class GUIMediator extends Observable{
 	private MemoryViewPanel memoryViewPanel1;
 	private MemoryViewPanel memoryViewPanel2;
 	private MemoryViewPanel memoryViewPanel3;
+	private MenuBarBuilder menuBuilder;
+
+	public MachineModel getModel() {
+		return model;
+	}
+
+	public void setModel(MachineModel model) {
+		this.model = model;
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public States getCurrentState(){
+		return model.getCurrentState();
+	}
+
+	public void setCurrentState(States s){
+		if(s == States.PROGRAM_HALTED){
+			stepControl.setAutoStepOn(false);
+		}
+		model.setCurrentState(s);
+		//3 Notify Lines
+		model.getCurrentState().enter();
+		setChanged();
+		notifyObservers();
+	}
+
+	public CodeViewPanel getCodeViewPanel() {
+		return codeViewPanel;
+	}
+
+	public void setCodeViewPanel(CodeViewPanel codeViewPanel) {
+		this.codeViewPanel = codeViewPanel;
+	}
+
+	public MemoryViewPanel getMemoryViewPanel1() {
+		return memoryViewPanel1;
+	}
+
+	public void setMemoryViewPanel1(MemoryViewPanel memoryViewPanel1) {
+		this.memoryViewPanel1 = memoryViewPanel1;
+	}
+
+	public MemoryViewPanel getMemoryViewPanel2() {
+		return memoryViewPanel2;
+	}
+
+	public void setMemoryViewPanel2(MemoryViewPanel memoryViewPanel2) {
+		this.memoryViewPanel2 = memoryViewPanel2;
+	}
+
+	public MemoryViewPanel getMemoryViewPanel3() {
+		return memoryViewPanel3;
+	}
+
+	public void setMemoryViewPanel3(MemoryViewPanel memoryViewPanel3) {
+		this.memoryViewPanel3 = memoryViewPanel3;
+	}
+
+	public void setPeriod(int period){
+		stepControl.setPeriod(period);
+	}
+
+	public void setFilesMgr(FilesMgr filesMgr){
+		this.filesMgr = filesMgr;
+	}
+
+	private void setFrame(JFrame jFrame){
+		JMenuBar bar = new JMenuBar();
+		this.frame = jFrame;
+		frame.setJMenuBar(bar);
+		bar.add(menuBuilder.createFileMenu());
+		bar.add(menuBuilder.createExecuteMenu());
+		bar.add(menuBuilder.createJobsMenu());
+	}
 
 	public void step(){
 		if(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){
@@ -108,10 +186,6 @@ public class GUIMediator extends Observable{
 		notifyObservers();
 	}
 
-	public JFrame getFrame() {
-		return frame;
-	}
-
 	public void clearJob() {
 		model.clearJob();
 		model.setCurrentState(States.NOTHING_LOADED);
@@ -142,10 +216,6 @@ public class GUIMediator extends Observable{
 		filesMgr.loadFile(model.getCurrentJob());
 	}
 
-	public void setPeriod(int period){
-		stepControl.setPeriod(period);
-	}
-
 	public void changeToJob(int i){
 		model.changeToJob(i);
 		if(model.getCurrentState()!=null){
@@ -163,29 +233,6 @@ public class GUIMediator extends Observable{
 		notifyObservers(string);
 	}
 
-	public MachineModel getModel() {
-		return model;
-	}
-
-	public void setModel(MachineModel model) {
-		this.model = model;
-	}
-
-	public States getCurrentState(){
-		return model.getCurrentState();
-	}
-
-	public void setCurrentState(States s){
-		if(s == States.PROGRAM_HALTED){
-			stepControl.setAutoStepOn(false);
-		}
-		model.setCurrentState(s);
-		//3 Notify Lines
-		model.getCurrentState().enter();
-		setChanged();
-		notifyObservers();
-	}
-
 	public void exit() { // method executed when user exits the program
 		int decision = JOptionPane.showConfirmDialog(
 				frame, "Do you really wish to exit?",
@@ -199,16 +246,13 @@ public class GUIMediator extends Observable{
 		stepControl = new StepControl(this);
 		filesMgr = new FilesMgr(this);
 		filesMgr.initialize();
-
 		codeViewPanel = new CodeViewPanel(this, model);
-
 		memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
 		memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE/2);
 		memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
-
 		//controlPanel = new ControlViewPanel(this, model);
 		//processorPanel = new ProcessorViewPanel(this, model);
-		//menuBuilder = new MenuBarBuilder(this);
+		menuBuilder = new MenuBarBuilder(this);
 
 		frame = new JFrame("Simulator");
 		Container content = frame.getContentPane();
@@ -228,17 +272,22 @@ public class GUIMediator extends Observable{
 		// return HERE for other setup details
 		frame.setVisible(true);
 	}
-// 	public static void main(String[] args) {
-// 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-// 			public void run() {
-// 				GUIMediator organizer = new GUIMediator();
-// 				MachineModel model = new MachineModel(
-// 				//() 
-// 				//-> organizer.setCurrentState(States.PROGRAM_HALTED)
-// 				);
-// 				organizer.setModel(model);
-// 				organizer.createAndShowGUI();
-// 				}
-// 			});
-// 	}
+
+	public void loadFile(){
+		filesMgr.loadFile(model.getCurrentJob());
+	}
+
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				GUIMediator organizer = new GUIMediator();
+				MachineModel model = new MachineModel(
+						() 
+						-> organizer.setCurrentState(States.PROGRAM_HALTED)
+						);
+				organizer.setModel(model);
+				organizer.createAndShowGUI();
+			}
+		});
+	}	
 }

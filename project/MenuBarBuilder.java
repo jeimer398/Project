@@ -56,7 +56,8 @@ public class MenuBarBuilder implements Observer{
 
 	public JMenu createExecuteMenu(){
 		JMenu menu = new JMenu("Execute");
-		menu.setMnemonic(KeyEvent.VK_G);
+		menu.setMnemonic(KeyEvent.VK_E);
+		go.setMnemonic(KeyEvent.VK_G);
 		go.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 		go.addActionListener(e -> gui.execute());

@@ -133,9 +133,11 @@ public class GUIMediator extends Observable{
 	}
 
 	public void execute(){
-		while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){
+		//while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){  //TEMPORARY FIX?
 			try{
-				model.step();
+                while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED) {
+                    model.step();
+                }
 			}catch (CodeAccessException e) {
 				JOptionPane.showMessageDialog(
 						frame, 
@@ -153,26 +155,27 @@ public class GUIMediator extends Observable{
 			}catch (NullPointerException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal access to data" + "\n"
+						"Null pointer exception" + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
+				e.printStackTrace();
 			}catch (IllegalArgumentException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal access to code" + "\n"
+						"Illegal argument" + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (DivideByZeroException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal access to code " + model.getpCounter() + "\n"
+						"Divide by zero " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
-								"Divide by zero error",
+								"Run time error",
 								JOptionPane.OK_OPTION);
 			}
-		}
+		//}
 		setChanged();
 		notifyObservers();
 	}
@@ -204,7 +207,7 @@ public class GUIMediator extends Observable{
 	}
 
 	public void assembleFile(){
-		filesMgr.loadFile(model.getCurrentJob());
+		filesMgr.assembleFile();
 	}
 
 	public void changeToJob(int i){
@@ -256,7 +259,7 @@ public class GUIMediator extends Observable{
 		Container content = frame.getContentPane();
 		content.setLayout(new BorderLayout(1,1));
 		content.setBackground(Color.BLACK);
-		content.setSize(new Dimension(1200, 600));
+		frame.setSize(new Dimension(1200, 600));
 
 		JPanel center = new JPanel();
 		center.setLayout(new GridLayout(1, 3));

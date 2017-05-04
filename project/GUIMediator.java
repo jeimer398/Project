@@ -87,15 +87,6 @@ public class GUIMediator extends Observable{
 		this.filesMgr = filesMgr;
 	}
 
-	private void setFrame(JFrame jFrame){
-		JMenuBar bar = new JMenuBar();
-		this.frame = jFrame;
-		frame.setJMenuBar(bar);
-		bar.add(menuBuilder.createFileMenu());
-		bar.add(menuBuilder.createExecuteMenu());
-		bar.add(menuBuilder.createJobsMenu());
-	}
-
 	public void step(){
 		if(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){
 			try{
@@ -255,6 +246,13 @@ public class GUIMediator extends Observable{
 		menuBuilder = new MenuBarBuilder(this);
 
 		frame = new JFrame("Simulator");
+
+		JMenuBar bar = new JMenuBar(); // import javax.swing.JMenuBar
+		frame.setJMenuBar(bar);
+		bar.add(menuBuilder.createFileMenu());
+		bar.add(menuBuilder.createExecuteMenu());
+		bar.add(menuBuilder.createJobsMenu());
+
 		Container content = frame.getContentPane();
 		content.setLayout(new BorderLayout(1,1));
 		content.setBackground(Color.BLACK);
@@ -282,9 +280,8 @@ public class GUIMediator extends Observable{
 			public void run() {
 				GUIMediator organizer = new GUIMediator();
 				MachineModel model = new MachineModel(
-						() 
-						-> organizer.setCurrentState(States.PROGRAM_HALTED)
-						);
+						() -> organizer.setCurrentState(States.PROGRAM_HALTED)
+				);
 				organizer.setModel(model);
 				organizer.createAndShowGUI();
 			}

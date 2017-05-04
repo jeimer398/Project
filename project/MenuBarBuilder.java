@@ -27,7 +27,9 @@ public class MenuBarBuilder implements Observer{
 
 	public JMenu createFileMenu(){
 		JMenu menu = new JMenu("File");
-		menu.setMnemonic(KeyEvent.VK_M);
+		menu.setMnemonic(KeyEvent.VK_F);
+
+		assemble.setMnemonic(KeyEvent.VK_M);
 		assemble.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_M, ActionEvent.CTRL_MASK));
 		assemble.addActionListener(e -> gui.assembleFile());
@@ -35,26 +37,26 @@ public class MenuBarBuilder implements Observer{
 
 		menu.addSeparator();
 
-		menu.setMnemonic(KeyEvent.VK_L);
+		load.setMnemonic(KeyEvent.VK_L);
 		load.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		load.addActionListener(e -> gui.loadFile());
-		menu.add(assemble);
+		menu.add(load);
 
 		menu.addSeparator();
 
-		menu.setMnemonic(KeyEvent.VK_E);
+		exit.setMnemonic(KeyEvent.VK_E);
 		exit.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_E, ActionEvent.CTRL_MASK));
 		exit.addActionListener(e -> gui.exit());
-		menu.add(assemble);
+		menu.add(exit);
 
 		return menu;
 	}
 
 	public JMenu createExecuteMenu(){
 		JMenu menu = new JMenu("Execute");
-		menu.setMnemonic(KeyEvent.VK_X);
+		menu.setMnemonic(KeyEvent.VK_G);
 		go.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 		go.addActionListener(e -> gui.execute());
@@ -96,7 +98,6 @@ public class MenuBarBuilder implements Observer{
 	
 	@Override
 	public void update(Observable arg0, Object arg1){
-		assemble.setEnabled(gui.getCurrentState().getAssembleFileActive());
 		assemble.setEnabled(gui.getCurrentState().getAssembleFileActive());
 		load.setEnabled(gui.getCurrentState().getLoadFileActive());
 		go.setEnabled(gui.getCurrentState().getStepActive());

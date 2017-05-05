@@ -135,11 +135,9 @@ public class GUIMediator extends Observable{
 	}
 
 	public void execute(){
-		//while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){  //TEMPORARY FIX?
+		while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){  //TEMPORARY FIX?
 			try{
-                while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED) {
                     model.step();
-                }
 			}catch (CodeAccessException e) {
 				JOptionPane.showMessageDialog(
 						frame, 
@@ -177,17 +175,18 @@ public class GUIMediator extends Observable{
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}
-		//}
+		}
 		setChanged();
 		notifyObservers();
 	}
 
 	public void clearJob() {
+		int codeSize = model.getCurrentJob().getCodeSize();
 		model.clearJob();
 		model.setCurrentState(States.NOTHING_LOADED);
 		model.getCurrentState().enter();
 		setChanged();
-		notifyObservers("Clear");
+		notifyObservers("Clear " + codeSize); // NOTE the space in "Clear "
 	}
 
 	public void toggleAutoStep(){

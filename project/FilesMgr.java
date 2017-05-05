@@ -126,7 +126,7 @@ public class FilesMgr {
                     System.out.println("Error writing properties file");
                 }
                 ArrayList<String> errors = new ArrayList<>();
-                Assembler.assemble(source, outputExe, errors);
+                Assembler2.assemble(source, outputExe, errors);
                 if (errors.size() == 0){
                     JOptionPane.showMessageDialog(
                             gui.getFrame(),

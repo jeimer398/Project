@@ -135,7 +135,7 @@ public class GUIMediator extends Observable{
 	}
 
 	public void execute(){
-		while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){  //TEMPORARY FIX?
+		while(model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){
 			try{
                     model.step();
 			}catch (CodeAccessException e) {

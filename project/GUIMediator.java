@@ -160,7 +160,6 @@ public class GUIMediator extends Observable{
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
-				e.printStackTrace();
 			}catch (IllegalArgumentException e){
 				JOptionPane.showMessageDialog(
 						frame,

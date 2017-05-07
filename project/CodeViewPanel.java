@@ -103,7 +103,7 @@ public class CodeViewPanel implements Observer {
 			}
 		}
 	}
-
+/*
 	public static void main(String[] args) {
 		GUIMediator view = new GUIMediator();
 		MachineModel model = new MachineModel();
@@ -117,5 +117,5 @@ public class CodeViewPanel implements Observer {
 		int size = Integer.parseInt(Loader.load(model, new File("out.pexe"), 0, 0));
 		model.getCurrentJob().setCodeSize(size);
 		panel.update(view, "Load Code");
-	}
+	}*/
 }

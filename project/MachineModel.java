@@ -12,9 +12,8 @@ public class MachineModel {
 	private Job[] jobs = new Job[4];
 	private Job currentJob;
 
-	public MachineModel(HaltCallback callBack){
+	public MachineModel(HaltCallback callback){
 		this.callback = callback;
-		System.out.println("Callback: " + callback);
 		
 		for(int i=0; i<jobs.length; i++){
 			if(0<=i && i<=3){
@@ -322,7 +321,6 @@ public class MachineModel {
 			int arg = code.getArg(pc);
 			get(opcode).execute(arg, indirLvl);
 		} catch(Exception e){
-			e.printStackTrace();
 			callback.halt();
 			throw e;
 		}

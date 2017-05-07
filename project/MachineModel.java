@@ -14,6 +14,7 @@ public class MachineModel {
 
 	public MachineModel(HaltCallback callBack){
 		this.callback = callback;
+		System.out.println("Callback: " + callback);
 		
 		for(int i=0; i<jobs.length; i++){
 			if(0<=i && i<=3){
@@ -222,7 +223,7 @@ public class MachineModel {
 		});
 
 		//HALT
-		IMAP.put(0xD, (arg, level) -> {
+		IMAP.put(0xF, (arg, level) -> {
 			callback.halt();			
 		});
 	}
@@ -321,8 +322,8 @@ public class MachineModel {
 			int arg = code.getArg(pc);
 			get(opcode).execute(arg, indirLvl);
 		} catch(Exception e){
-			//callback.halt();
 			e.printStackTrace();
+			callback.halt();
 			throw e;
 		}
 	}

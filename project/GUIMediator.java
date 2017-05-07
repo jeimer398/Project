@@ -110,21 +110,22 @@ public class GUIMediator extends Observable{
 			}catch (NullPointerException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal access to data" + "\n"
+						"Null pointer exception" + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
+				e.printStackTrace();
 			}catch (IllegalArgumentException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal access to code" + "\n"
+						"Illegal argument" + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (DivideByZeroException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal access to code " + model.getpCounter() + "\n"
+						"Divide by zero " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Divide by zero error",
 								JOptionPane.OK_OPTION);
@@ -296,8 +297,9 @@ public class GUIMediator extends Observable{
 			public void run() {
 				GUIMediator organizer = new GUIMediator();
 				MachineModel model = new MachineModel(
-						() -> organizer.setCurrentState(States.PROGRAM_HALTED)
-				);
+                                ()
+                                -> organizer.setCurrentState(States.PROGRAM_HALTED)
+				                );
 				organizer.setModel(model);
 				organizer.createAndShowGUI();
 			}

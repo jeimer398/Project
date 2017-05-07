@@ -313,7 +313,7 @@ public class MachineModel {
 	public void step(){
 		try{
 			int pc = cpu.getpCounter();
-			if(pc>=currentJob.getStartcodeIndex() || pc<currentJob.getStartcodeIndex()+currentJob.getCodeSize()){
+			if(pc<currentJob.getStartcodeIndex() || pc>=currentJob.getStartcodeIndex()+currentJob.getCodeSize()){
 				throw new CodeAccessException("PC out of bounds.");
 			}
 			int opcode = code.getOp(pc);
@@ -321,7 +321,8 @@ public class MachineModel {
 			int arg = code.getArg(pc);
 			get(opcode).execute(arg, indirLvl);
 		} catch(Exception e){
-			callback.halt();
+			//callback.halt();
+			e.printStackTrace();
 			throw e;
 		}
 	}

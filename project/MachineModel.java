@@ -201,11 +201,11 @@ public class MachineModel {
 			}
 		});
 
-		//INSTRUCTION MAP entry for "JUMP"
+		//INSTRUCTION MAP entry for "JMPZ"
 		IMAP.put(0xC, (arg, level) -> {
 			if(level < 0 || level > 3) {
 				throw new IllegalArgumentException(
-						"Illegal indirection level in JUMP instruction");
+						"Illegal indirection level in JMPZ instruction");
 			}
 			if (cpu.getAccum() == 0) {
 				if (level == 3) {

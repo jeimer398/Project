@@ -109,7 +109,7 @@ public class MachineModel {
 				IMAP.get(0x6).execute(memory.getData(cpu.getMemBase()+arg), level-1);
 			} else {
 				if (arg == 0) {
-					throw new DivideByZeroException();
+					throw new DivideByZeroException("Divide by zero");
 				}
 				cpu.setAccum(cpu.getAccum() / arg);
 				cpu.incrPC();
@@ -314,13 +314,14 @@ public class MachineModel {
 		try{
 			int pc = cpu.getpCounter();
 			if(pc<currentJob.getStartcodeIndex() || pc>=currentJob.getStartcodeIndex()+currentJob.getCodeSize()){
-				throw new CodeAccessException("PC out of bounds.");
+				throw new CodeAccessException("Illegal access outside of executing code");
 			}
 			int opcode = code.getOp(pc);
 			int indirLvl= code.getIndirLvl(pc);
 			int arg = code.getArg(pc);
 			get(opcode).execute(arg, indirLvl);
 		} catch(Exception e){
+			e.printStackTrace();
 			callback.halt();
 			throw e;
 		}

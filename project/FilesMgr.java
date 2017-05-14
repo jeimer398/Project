@@ -3,9 +3,7 @@ package project;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by bengw on 4/28/2017.
@@ -134,14 +132,25 @@ public class FilesMgr {
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    Collections.sort(errors);
+                    Map<Integer, ArrayList<String>> errorMap = new TreeMap<>();
+                    for (String err : errors) {
+                        String part = err.replaceAll("^[^\\d]*(\\d+).*$", "$1");
+                        Integer k = Integer.parseInt(part);
+                        if(!errorMap.containsKey(k))
+                            errorMap.put(Integer.parseInt(part), new ArrayList<>());
+                        errorMap.get(k).add(err);
+                    }
                     StringBuilder sb = new StringBuilder();
-                    for(String s : errors) {
-                        sb.append(s); sb.append("\n");
+                    for(Integer key : errorMap.keySet()) {  // the keys will be in increasing order
+                        ArrayList<String> list = errorMap.get(key);
+                        for(String s : list) {
+                            sb.append(s);
+                            sb.append("\n");
+                        }
                     }
                     JOptionPane.showMessageDialog(
                             gui.getFrame(),
-                            errors,
+                            sb,
                             "Source code error",
                             JOptionPane.INFORMATION_MESSAGE);
                 }

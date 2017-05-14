@@ -103,29 +103,28 @@ public class GUIMediator extends Observable{
 			}catch (ArrayIndexOutOfBoundsException e){
 				JOptionPane.showMessageDialog(
 						frame, 
-						"Illegal access to data" + "\n"
+						"Illegal access to data from line " + model.getpCounter()+ "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (NullPointerException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Null pointer exception" + "\n"
+						"Null pointer exception from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
-				e.printStackTrace();
 			}catch (IllegalArgumentException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal argument" + "\n"
+						"Illegal argument from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (DivideByZeroException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Divide by zero " + model.getpCounter() + "\n"
+						"Divide by zero from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Divide by zero error",
 								JOptionPane.OK_OPTION);
@@ -149,28 +148,28 @@ public class GUIMediator extends Observable{
 			}catch (ArrayIndexOutOfBoundsException e){
 				JOptionPane.showMessageDialog(
 						frame, 
-						"Illegal access to data" + "\n"
+						"Illegal access to data from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (NullPointerException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Null pointer exception" + "\n"
+						"Null pointer exception from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (IllegalArgumentException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Illegal argument" + "\n"
+						"Illegal argument from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);
 			}catch (DivideByZeroException e){
 				JOptionPane.showMessageDialog(
 						frame,
-						"Divide by zero " + model.getpCounter() + "\n"
+						"Divide by zero from line " + model.getpCounter() + "\n"
 								+ "Exception message: " + e.getMessage(),
 								"Run time error",
 								JOptionPane.OK_OPTION);

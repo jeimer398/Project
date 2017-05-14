@@ -13,7 +13,7 @@ public class Memory {
 	}
 	public int getData(int index){
 		if(index < 0 || index > DATA_SIZE){
-			throw new IllegalArgumentException("Out of bounds");
+			throw new ArrayIndexOutOfBoundsException("-1");
 		}
 		return data[index];
 	}

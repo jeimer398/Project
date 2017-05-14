@@ -322,7 +322,6 @@ public class MachineModel {
 			int arg = code.getArg(pc);
 			get(opcode).execute(arg, indirLvl);
 		} catch(Exception e){
-			e.printStackTrace();
 			callback.halt();
 			throw e;
 		}

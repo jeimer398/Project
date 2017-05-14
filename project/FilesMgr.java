@@ -17,7 +17,7 @@ public class FilesMgr {
     private String executableDir; // stored directory for pexe assembled files
     private Properties properties = null; // java.util.Properties
     // Java method for persistent program properties
-    private File currentlyExecutingFile = null; // java.io.File
+    private File[] currentlyExecutingFile = new File[4]; // java.io.File
 
     public FilesMgr(GUIMediator gui) {
 		super();
@@ -173,19 +173,20 @@ public class FilesMgr {
     }
 
     public void loadFile(Job job) {
+        int index = job.getId();
         JFileChooser chooser = new JFileChooser(executableDir);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Pippin Executable Files", "pexe");
         chooser.setFileFilter(filter);
         // CODE TO LOAD DESIRED FILE
         int openOK = chooser.showOpenDialog(null);
-        if(openOK == JFileChooser.APPROVE_OPTION) {
-            currentlyExecutingFile = chooser.getSelectedFile();
+        if (openOK == JFileChooser.APPROVE_OPTION) {
+            currentlyExecutingFile[index] = chooser.getSelectedFile();
         }
-        if(currentlyExecutingFile != null && currentlyExecutingFile.exists()) {
+        if (currentlyExecutingFile != null && currentlyExecutingFile[index].exists()) {
             // CODE TO REMEMBER WHICH DIRECTORY HAS THE pexe FILES
-            executableDir = currentlyExecutingFile .getAbsolutePath();
-            executableDir = executableDir.replace('\\','/');
+            executableDir = currentlyExecutingFile[index].getAbsolutePath();
+            executableDir = executableDir.replace('\\', '/');
             int lastSlash = executableDir.lastIndexOf('/');
             executableDir = executableDir.substring(0, lastSlash + 1);
             try {
@@ -202,7 +203,7 @@ public class FilesMgr {
 
     void finalLoad_ReloadStep(Job job) {
         gui.clearJob();
-        String str = Loader.load(model, currentlyExecutingFile,
+        String str = Loader.load(model, currentlyExecutingFile[job.getId()],
                 job.getStartcodeIndex(), job.getStartmemoryIndex());
         try {
             int len = Integer.parseInt(str);

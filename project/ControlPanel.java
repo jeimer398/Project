@@ -17,7 +17,6 @@ public class ControlPanel implements Observer{
 	private JButton reloadButton = new JButton("Reload");
 	
 	public ControlPanel(GUIMediator gui) {
-		super();
 		this.gui = gui;
 		gui.addObserver(this);
 	}
@@ -52,8 +51,8 @@ public class ControlPanel implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1){
 		stepButton.setEnabled(gui.getCurrentState().getStepActive());
-		clearButton.setEnabled(gui.getCurrentState().getStepActive());
-		runButton.setEnabled(gui.getCurrentState().getStepActive());
-		reloadButton.setEnabled(gui.getCurrentState().getStepActive());
+		clearButton.setEnabled(gui.getCurrentState().getClearActive());
+		runButton.setEnabled(gui.getCurrentState().getRunPauseActive());
+		reloadButton.setEnabled(gui.getCurrentState().getReloadActive());
 	}
 }

@@ -22,6 +22,7 @@ public class MachineModel {
 			jobs[i].setId(i);
 			jobs[i].setStartcodeIndex(i*Code.CODE_MAX/4);
 			jobs[i].setStartmemoryIndex(i*Memory.DATA_SIZE/4);
+			jobs[i].getCurrentState().enter();
 		}
 		currentJob = jobs[0];
 		//INSTRUCTION MAP entry for "NOP"
@@ -304,7 +305,7 @@ public class MachineModel {
 	
 	public void clearJob(){
 		memory.clear(currentJob.getStartmemoryIndex(), currentJob.getStartmemoryIndex() + Memory.DATA_SIZE/4);
-		code.clear(currentJob.getStartcodeIndex(), currentJob.getStartcodeIndex() + currentJob.getCodeSize());
+		code.clear(currentJob.getStartcodeIndex(), currentJob.getCodeSize());
 		cpu.setAccum(0);
 		cpu.setpCounter(currentJob.getStartcodeIndex());
 		currentJob.reset();
